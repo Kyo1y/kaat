@@ -1,4 +1,4 @@
-# csc260-code-review
+# KAAT
 
 Complete this README so that it
 - describes what this project is about

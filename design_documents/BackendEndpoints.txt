@@ -1,0 +1,208 @@
+1.
+GET /api/users/:user_id
+Purpose: Fetch the currently authenticated user’s profile.
+{
+  "id": "1",
+  "name": "Alice",
+  "email": "alice@example.com",
+  "is_teacher": true,
+  "profile_pic": null
+}
+
+2.
+GET /api/classes
+Purpose: List all classes (for teacher dashboard or browse).
+Response:
+[
+  { "id": "c1", "name": "CS101", "term": "Spring 2025", "teacher": "u1" },
+  { "id": "c2", "name": "Math 201", "term": "Fall 2025", "teacher": "u2" }
+]
+
+3.
+GET /api/classes/:class_id
+Purpose: Get details for one class (used in CoursePage).
+Response:
+{
+  "id": "c1",
+  "name": "CS101",
+  "term": "Spring 2025",
+  "start_date": "2025-01-20T00:00:00Z",
+  "end_date":   "2025-05-15T00:00:00Z",
+  "teacher":    "u1"
+}
+
+4.
+GET /api/users/:user_id/classes
+Purpose: Fetch all classes the user is enrolled in (for HomePage).
+Response:
+[
+  { "id": "c1", "name": "CS101", "term": "Spring 2025" },
+  { "id": "c3", "name": "Hist200", "term": "Spring 2025" }
+]
+
+5.
+PUT /api/classes/:class_id
+Purpose: Edit class.
+Request body:
+{ "name": "CS101‑A", "term": "Spring 2025", "start_date": "...", "end_date": "..." }
+Response:
+{
+  "id": "c1",
+  "name": "CS101‑A",
+  "term": "Spring 2025",
+  "start_date": "2025-01-20T00:00:00Z",
+  "end_date":   "2025-05-15T00:00:00Z"
+}
+
+6. 
+GET /api/classes/:class_id/assignments
+Purpose: List all assignments in a class (CoursePage student/teacher list).
+Response:
+[
+  {
+    "id": "a1",
+    "name": "Homework 1",
+    "description": "Arrays and loops",
+    "release_date":          "2025-02-01T00:00:00Z",
+    "submission_deadline":   "2025-02-08T23:59:59Z",
+    "commenting_deadline":   "2025-02-15T23:59:59Z"
+  },
+  { /* … */ }
+]
+
+7.
+GET /api/assignments/:assignment_id
+Purpose: Fetch details for one assignment (AssignmentPage).
+Response:
+{
+  "id": "a1",
+  "class_id": "c1",
+  "name": "Homework 1",
+  "description": "Arrays and loops",
+  "release_date":        "2025-02-01T00:00:00Z",
+  "submission_deadline": "2025-02-08T23:59:59Z",
+  "commenting_deadline": "2025-02-15T23:59:59Z"
+}
+
+8.
+POST /api/classes/:class_id/assignments
+Purpose: Create a new assignment (EditAssignments).
+Request body:
+{
+  "name": "Project 2",
+  "description": "Build a REST API",
+  "release_date":        "2025-03-01T00:00:00Z",
+  "submission_deadline": "2025-03-15T23:59:59Z",
+  "commenting_deadline": "2025-03-22T23:59:59Z"
+}
+
+Response:
+{ "id": "a5", "class_id": "c1", /* … same fields as GET … */ }
+
+9.
+GET /api/assignments/:assignment_id/submissions
+Purpose: List all submissions for this assignment (teacher’s grading view).
+Response:
+[
+  {
+    "id": "s1",
+    "assignment_id": "a1",
+    "user_id": "u3",
+    "submitted_at": "2025-02-07T18:22:00Z",
+    "is_current": true,
+    "submitter_has_reviewed_comments": false
+  },
+  { /* … */ }
+]
+
+10.
+GET /api/submissions/:submission_id
+Purpose: Fetch one submission (student’s “My Submission” or teacher’s detail pane).
+Response: same as above for that single id.
+
+11.
+POST /api/assignments/:assignment_id/submissions
+Purpose: Create or update a student’s submission (AssignmentPage student view).
+Request body:
+{
+  "content": "Here is my answer…",
+  "files": [ /* optional file‐IDs or form‐data uploads */ ]
+}
+Response:
+{
+  "id": "s2",
+  "assignment_id": "a1",
+  "user_id": "u3",
+  "submitted_at": "2025-02-08T20:05:00Z",
+  "is_current": true
+}
+
+12.
+GET /api/submissions/:submission_id/files
+Purpose: List uploaded files for a submission.
+Response:
+[
+  { "id": "f1", "submission_id": "s2", "name": "solution.py" },
+  { /* … */ }
+]
+
+13.
+POST /api/submissions/:submission_id/files
+Purpose: Upload a new file to a submission.
+Response:
+{ "id": "f3", "submission_id": "s2", "name": "diagram.png" }
+
+14.
+GET /api/submissions/:submission_id/comments
+Purpose: Fetch all inline comments on a submission.
+Response:
+[
+  {
+    "id": "c1",
+    "submission_id": "s2",
+    "user_id": "u1",
+    "type": "inline",
+    "line_number": 42,
+    "comment": "Can you optimize this loop?"
+  },
+  { /* … */ }
+]
+
+14.
+POST /api/submissions/:submission_id/comments
+Purpose: Add a new comment (teacher’s grading view).
+Request body:
+{ "type": "inline", "line_number": 42, "comment": "Consider using map()." }
+Response:
+{
+  "id": "c4",
+  "submission_id": "s2",
+  "user_id": "u1",
+  "type": "inline",
+  "line_number": 42,
+  "comment": "Consider using map()."
+}
+
+15.
+GET /api/assignments/:assignment_id/groups
+Purpose: Show all peer‑review groups for an assignment (student’s team view).
+Response:
+[
+  { "id": "g1", "assignment_id": "a1" },
+  { /* … */ }
+]
+
+16.
+POST /api/assignments/:assignment_id/groups
+Purpose: Teacher creates a new review group.
+Response:
+{ "id": "g3", "assignment_id": "a1" }
+
+17.
+GET /api/groups/:group_id/users
+Purpose: List members of a review group (teacher or student view).
+Response:
+[
+  { "user_id": "u2", "name": "Bob" },
+  { /* … */ }
+]

@@ -54,3 +54,8 @@ As a team member, I would like to:
 2. See all my teammates and the files they uploaded  
 3. Be able to comment on the code of my teammates to give review  
 4. Be able to review the comments I got on my upload
+
+
+### **8\. Team Dynamics**
+
+The team dynamics requires further discussion to come to the equilibrium of effort, coming from all members of the team.

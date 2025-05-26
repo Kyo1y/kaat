@@ -11,3 +11,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.assignmentItem {
+  display: flex;
+  align-items: center;
+}
+
+.course-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.user-info-container {
+  padding: 2rem;
+}
+.course-info-container {
+  padding: 2rem;
+}

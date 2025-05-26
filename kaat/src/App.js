@@ -1,19 +1,43 @@
-import { useState, useEffect } from "react"
-import HomePage from './components/Homepage.js'
-import AuthProvider from './AuthProvider.js'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import CoursePage from "./components/CoursePage";
+import AssignmentPage from "./components/AssignmentPage";
+import { useState } from 'react';
 
-
-function App() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [role, setRole] = useState("")
-    const [user, setUser] = useState();
-
+export default function App() {
+    const [fakeCourse, setFakeCourse] = useState(
+        {
+            id: "42",
+            name: "Intro to Testing",
+            assignments: [
+              { id: "a1", title: "Test Assignment 1", dueDate: "2025-05-28", dueTime: "23:59" },
+              { id: "a2", title: "Test Assignment 2", dueDate: "2025-05-28", dueTime: "23:59" },
+            ],
+        });
+        
+        
     return (
-        <div className="main-container">
-            <main>
-                {isLoggedIn && <HomePage /*add props*/ />}
-                {!isLoggedIn && <AuthProvider  /*add props*/ />}
-            </main>
-        </div>
-    )
+        <BrowserRouter>
+        <Routes>
+            {/* REAL ROUTES… */}
+
+            {/* === TEST === */}
+            <Route
+            path="/_test/course"
+            element={
+                <CoursePage
+                currentCourse={fakeCourse}
+                role="teacher"
+                user={{ id: "u1", name: "Alice" }}
+                updateCourse={setFakeCourse}
+                />
+            }
+            />
+
+            <Route
+            path="/_test/course/:assignmentId"
+            element={<AssignmentPage />}
+            />
+        </Routes>
+        </BrowserRouter>
+    );
 }
